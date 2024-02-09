@@ -1,0 +1,70 @@
+from tkinter import *
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+
+def clearAll() :
+    e1.delete(0, END)
+    e2.delete(0, END)
+    e3.delete(0, END)
+    e4.delete(0, END)
+    e5.delete(0, END)
+
+
+def hpp():
+    data = pd.read_csv('USA_Housing.csv')
+    data = data.drop(['Address'], axis=1)
+    X = data.drop(['Price'], axis=1)
+    Y = data['Price']
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+    model = LinearRegression()
+    model.fit(X_train,Y_train)
+    var1 = float(e1.get())
+    var2 = float(e2.get())
+    var3 = float(e3.get())
+    var4 = float(e4.get())
+    var5 = float(e5.get())
+    a = np.array([var1, var2, var3, var4, var5],dtype = 'float').reshape(1,-1)
+    pred = model.predict(a)
+    pred = round(pred[0])
+    myText.set(pred)
+
+
+
+master = Tk()
+myText = StringVar()
+master.geometry("600x600")
+master.configure(background="#696969")
+master.title("HousePricePrediction")
+Label(master, text='House Price Prediction',bg="#A52A2A",fg = "white", height="1",width="30").place(x=180, y=20)
+Label(master, text='Avg. Area Income',bg="#4682B4", height="1",width="30").place(x=100, y=60)
+Label(master, text='Avg. Area House Age' , bg="#4682B4", height="1",width="30").place(x=100, y=100)
+Label(master, text='Avg. Area Number of Rooms',bg="#4682B4", height="1",width="30").place(x=100, y=140)
+Label(master, text='Avg. Area Number of Bedrooms',bg="#4682B4", height="1",width="30").place(x=100, y=180)
+Label(master, text='Avg. Area Population',bg="#4682B4", height="1",width="30").place(x=100, y=220)
+Label(master, text="House Value:",bg="#20B2AA").place(x=240, y=300)
+result = Label(master, text="", textvariable=myText).place(x=320, y=300)
+
+b1 = Button(master, text="Predict", fg = "white", bg = "green", command=hpp)
+b1.place(x=240, y=260)
+b2= Button(master, text = "Clear All", fg = "white", bg = "red", command = clearAll)
+b2.place(x=320, y=260)
+
+
+e1 = Entry(master)
+e2 = Entry(master)
+e3 = Entry(master)
+e4 = Entry(master)
+e5 = Entry(master)
+e1.place(x=330, y=60)
+e2.place(x=330, y=100)
+e3.place(x=330, y=140)
+e4.place(x=330, y=180)
+e5.place(x=330, y=220)
+
+
+mainloop()
